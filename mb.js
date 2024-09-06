@@ -1,3 +1,5 @@
+// 1. Loading a more recent version of prom-client and updating the require cache to force
+//    mountebank to use the latest version which includes fixes for bun.
 require("prom-client");
 
 const requireCache = Object.keys(require.cache);
@@ -8,6 +10,5 @@ requireCache
         require.cache[m] = require.cache[n];
     });
 
-console.log(Object.keys(require.cache).filter(n=>/prom-client/.test(n)));
-
+// 2. Run mb!
 require("mountebank/bin/mb");
