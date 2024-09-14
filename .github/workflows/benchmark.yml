@@ -14,10 +14,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
       
-      - name: Status Checkout
+      - name: Status Check
         run: |
           pwd
           ls
+          cat /proc/cpuinfo
+          cat /proc/meminfo
 
       # - name: Start InfluxDB
       #   uses: addnab/docker-run-action@v3
@@ -45,7 +47,7 @@ jobs:
         with: 
           image: bbyars/mountebank:latest
           options: --name mb --rm -v /home/runner/work/mb4perf/mb4perf/test/imposters.json:/imposters.json -p 4545:4545 -p 2525:2525 -d 
-          run: mb --configfile /imposters.json --nologfile --loglevel error
+          run: mb --configfile /imposters.json --allowInjection --nologfile --loglevel silent --no-mock --no-recordRequests
       
       - name: Run K6 Benchmark for Test 1 @ 25 vus
         uses: addnab/docker-run-action@v3
@@ -74,6 +76,27 @@ jobs:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
           run: k6 run --vus 100 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 1 @ 125 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
+          run: k6 run --vus 125 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 1 @ 150 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
+          run: k6 run --vus 150 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 1 @ 175 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
+          run: k6 run --vus 175 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 1 @ 200 vus
         uses: addnab/docker-run-action@v3
@@ -122,6 +145,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
       
+      - name: Status Check
+        run: |
+          pwd
+          ls
+          cat /proc/cpuinfo
+          cat /proc/meminfo
+          
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag kevinaird/mb4perf
 
@@ -130,7 +160,7 @@ jobs:
         with: 
           image: kevinaird/mb4perf
           options: --name mb4perf --rm -v /home/runner/work/mb4perf/mb4perf/test/imposters.json:/imposters.json -p 4545:4545 -p 2525:2525 -d 
-          run: ./start.sh --configfile /imposters.json --nologfile --loglevel error
+          run: ./start.sh --configfile /imposters.json --allowInjection --nologfile --loglevel silent --no-mock --no-recordRequests
 
       - name: Run K6 Benchmark for Test 2 @ 25 vus
         uses: addnab/docker-run-action@v3
@@ -159,6 +189,27 @@ jobs:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
           run: k6 run --vus 100 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 125 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
+          run: k6 run --vus 125 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 150 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
+          run: k6 run --vus 150 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 175 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
+          run: k6 run --vus 175 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 2 @ 200 vus
         uses: addnab/docker-run-action@v3
