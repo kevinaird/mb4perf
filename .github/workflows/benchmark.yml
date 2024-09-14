@@ -130,7 +130,7 @@ jobs:
         with: 
           image: kevinaird/mb4perf
           options: --name mb4perf --rm -v /home/runner/work/mb4perf/mb4perf/test/imposters.json:/imposters.json -p 4545:4545 -p 2525:2525 -d 
-          run: mb --configfile /imposters.json --nologfile --loglevel error
+          run: ./start.sh --configfile /imposters.json --nologfile --loglevel error
 
       - name: Run K6 Benchmark for Test 2 @ 25 vus
         uses: addnab/docker-run-action@v3
