@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Test
+  test1:
+    name: Test 1 - Regular Mountebank
     runs-on: ubuntu-latest
 
     steps:
@@ -112,6 +112,16 @@ jobs:
       - name: Stop Mountebank
         run: docker rm -f mb
 
+  test2:
+    name: Test 2 - MB4PERF
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      
       - name: Start MB4PERF for Test 2
         uses: addnab/docker-run-action@v3
         with: 
