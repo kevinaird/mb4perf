@@ -20,7 +20,10 @@ const imp = {
                 "Content-Type": "application/xml"
               },
               "body": "<customer><email>customer@test.com</email></customer>"
-            }
+            },
+            "behaviors": [
+                { "wait": 120 }
+            ]
           }
         ]
       }

@@ -28,17 +28,17 @@ jobs:
       # - name: Create DB in Influx
       #   run: docker exec influxdb influx -execute 'CREATE DATABASE k6'
 
-      - name: Capture Logs
-        uses: addnab/docker-run-action@v3
-        with:
-          image: timberio/vector:latest-alpine
-          options: --name vector --privileged -e VECTOR_CONFIG=/etc/vector/vector.toml -e DOCKER_HOST=unix:///var/run/docker.sock -v /home/runner/work/mb4perf/mb4perf/output:/output -v /home/runner/work/mb4perf/mb4perf/test/vector.toml:/etc/vector/vector.toml -v /var/run/docker.sock:/var/run/docker.sock -v /usr/local/bin/docker:/usr/bin/docker -d
+      # - name: Capture Logs
+      #   uses: addnab/docker-run-action@v3
+      #   with:
+      #     image: timberio/vector:latest-alpine
+      #     options: --name vector --privileged -e VECTOR_CONFIG=/etc/vector/vector.toml -e DOCKER_HOST=unix:///var/run/docker.sock -v /home/runner/work/mb4perf/mb4perf/output:/output -v /home/runner/work/mb4perf/mb4perf/test/vector.toml:/etc/vector/vector.toml -v /var/run/docker.sock:/var/run/docker.sock -v /usr/local/bin/docker:/usr/bin/docker -d
 
-      - name: Start Telegraf
-        uses: addnab/docker-run-action@v3
-        with:
-          image: telegraf
-          options: --name telegraf --privileged -v /home/runner/work/mb4perf/mb4perf/output:/output -v /home/runner/work/mb4perf/mb4perf/test/telegraf.conf:/etc/telegraf/telegraf.conf:ro -v /var/run/docker.sock:/var/run/docker.sock -v /:/hostfs:ro -v /run/udev:/run/udev:ro -e HOST_PROC=/hostfs/proc -e HOST_MOUNT_PREFIX=/hostfs -p 4546:8086 -d 
+      # - name: Start Telegraf
+      #   uses: addnab/docker-run-action@v3
+      #   with:
+      #     image: telegraf
+      #     options: --name telegraf --privileged -v /home/runner/work/mb4perf/mb4perf/output:/output -v /home/runner/work/mb4perf/mb4perf/test/telegraf.conf:/etc/telegraf/telegraf.conf:ro -v /var/run/docker.sock:/var/run/docker.sock -v /:/hostfs:ro -v /run/udev:/run/udev:ro -e HOST_PROC=/hostfs/proc -e HOST_MOUNT_PREFIX=/hostfs -p 4546:8086 -d 
 
       - name: Start Mountebank for Test 1
         uses: addnab/docker-run-action@v3
@@ -103,11 +103,11 @@ jobs:
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
           run: k6 run --vus 500 --duration 1m /script.js
 
-      - name: Print Telegraf metrics for Test 1
-        run: |
-          ls /home/runner/work/mb4perf/mb4perf/output/*
-          cat /home/runner/work/mb4perf/mb4perf/output/metrics.out
-          echo "" > /home/runner/work/mb4perf/mb4perf/output/metrics.out
+      # - name: Print Telegraf metrics for Test 1
+      #   run: |
+      #     ls /home/runner/work/mb4perf/mb4perf/output/*
+      #     cat /home/runner/work/mb4perf/mb4perf/output/metrics.out
+      #     echo "" > /home/runner/work/mb4perf/mb4perf/output/metrics.out
 
       - name: Stop Mountebank
         run: docker rm -f mb
@@ -118,7 +118,6 @@ jobs:
           image: bbyars/mountebank:latest
           options: --name mb4perf --rm -v /home/runner/work/mb4perf/mb4perf/test/imposters.json:/imposters.json -p 4545:4545 -p 2525:2525 -d 
           run: mb --configfile /imposters.json --nologfile --loglevel error
-
 
       - name: Run K6 Benchmark for Test 2 @ 25 vus
         uses: addnab/docker-run-action@v3
