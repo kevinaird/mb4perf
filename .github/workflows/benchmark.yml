@@ -52,56 +52,56 @@ jobs:
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 25 --duration 1m /script.js
+          run: k6 run --vus 25 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 1 @ 50 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 50 --duration 1m /script.js
+          run: k6 run --vus 50 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 1 @ 75 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 75 --duration 1m /script.js
+          run: k6 run --vus 75 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 1 @ 100 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 100 --duration 1m /script.js
+          run: k6 run --vus 100 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 1 @ 200 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 200 --duration 1m /script.js
+          run: k6 run --vus 200 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 1 @ 300 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 300 --duration 1m /script.js
+          run: k6 run --vus 300 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 1 @ 400 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 400 --duration 1m /script.js
+          run: k6 run --vus 400 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 1 @ 500 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 500 --duration 1m /script.js
+          run: k6 run --vus 500 --duration 1m /script.js
 
       - name: Print Telegraf metrics for Test 1
         run: |
@@ -125,56 +125,56 @@ jobs:
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 25 --duration 1m /script.js
+          run: k6 run --vus 25 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 2 @ 50 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 50 --duration 1m /script.js
+          run: k6 run --vus 50 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 2 @ 75 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 75 --duration 1m /script.js
+          run: k6 run --vus 75 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 2 @ 100 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 100 --duration 1m /script.js
+          run: k6 run --vus 100 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 2 @ 200 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 200 --duration 1m /script.js
+          run: k6 run --vus 200 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 2 @ 300 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 300 --duration 1m /script.js
+          run: k6 run --vus 300 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 2 @ 400 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 400 --duration 1m /script.js
+          run: k6 run --vus 400 --duration 1m /script.js
 
       - name: Run K6 Benchmark for Test 2 @ 500 vus
         uses: addnab/docker-run-action@v3
         with:
           image: grafana/k6
           options: --name k6 --rm -v /home/runner/work/mb4perf/mb4perf/test/script.js:/script.js --network host
-          run: run --vus 500 --duration 1m /script.js
+          run: k6 run --vus 500 --duration 1m /script.js
 
       - name: Print Telegraf metrics for Test 2
         run: |
