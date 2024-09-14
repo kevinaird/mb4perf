@@ -122,10 +122,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
       
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag kevinaird/mb4perf
+
       - name: Start MB4PERF for Test 2
         uses: addnab/docker-run-action@v3
         with: 
-          image: bbyars/mountebank:latest
+          image: kevinaird/mb4perf
           options: --name mb4perf --rm -v /home/runner/work/mb4perf/mb4perf/test/imposters.json:/imposters.json -p 4545:4545 -p 2525:2525 -d 
           run: mb --configfile /imposters.json --nologfile --loglevel error
 
