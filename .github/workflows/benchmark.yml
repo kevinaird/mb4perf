@@ -1,0 +1,181 @@
+name: Execute Benchmarks
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      
+      # - name: Start InfluxDB
+      #   uses: addnab/docker-run-action@v3
+      #   with:
+      #     image: influxdb:1.8-alpine
+      #     options: --name influxdb -p 4546:8086 -e INFLUXDB_DB=k6 -d 
+
+      # - name: Create DB in Influx
+      #   run: docker exec influxdb influx -execute 'CREATE DATABASE k6'
+
+      - name: Capture Logs
+        uses: addnab/docker-run-action@v3
+        with:
+          image: timberio/vector:latest-alpine
+          options: --name vector --privileged -e VECTOR_CONFIG=/etc/vector/vector.toml -e DOCKER_HOST=unix:///var/run/docker.sock -v $PWD/output:/output -v $PWD/test/vector.toml:/etc/vector/vector.toml -v /var/run/docker.sock:/var/run/docker.sock -v /usr/local/bin/docker:/usr/bin/docker -d
+
+      - name: Start Telegraf
+        uses: addnab/docker-run-action@v3
+        with:
+          image: telegraf
+          options: --name telegraf --priveleged -v $PWD/output:/output -v $PWD/test/telegraf.conf:/etc/telegraf/telegraf.conf:ro -v /var/run/docker.sock:/var/run/docker.sock -v /:/hostfs:ro -v /run/udev:/run/udev:ro -e HOST_PROC=/hostfs/proc -e HOST_MOUNT_PREFIX=/hostfs -p 4546:8086 -d 
+
+      - name: Start Mountebank for Test 2
+        uses: addnab/docker-run-action@v3
+        with: 
+          image: bbyars/mountebank:latest
+          options: --name mb --rm -v $PWD/test/imposters.json:/imposters.json -p 4545:4545 -p 2525:2525 -d 
+          run: mb --configfile /imposters.json --nologfile --loglevel error
+      
+      - name: Run K6 Benchmark for Test 2 @ 25 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 25 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 50 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 50 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 75 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 75 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 100 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 100 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 200 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 200 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 300 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 300 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 400 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 400 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 1 @ 500 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 500 --duration 1m /script.js
+
+      - name: Print Telegraf metrics for Test 1
+        run: |
+          ls $PWD/output/*
+          cat $PWD/output/metrics.out
+          echo "" > $PWD/output/metrics.out
+
+      - name: Stop Mountebank
+        run: docker rm -f mb
+
+      - name: Start MB4PERF for Test 2
+        uses: addnab/docker-run-action@v3
+        with: 
+          image: bbyars/mountebank:latest
+          options: --name mb4perf --rm -v $PWD/test/imposters.json:/imposters.json -p 4545:4545 -p 2525:2525 -d 
+          run: mb --configfile /imposters.json --nologfile --loglevel error
+
+
+      - name: Run K6 Benchmark for Test 2 @ 25 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 25 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 50 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 50 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 75 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 75 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 100 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 100 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 200 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 200 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 300 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 300 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 400 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 400 --duration 1m /script.js
+
+      - name: Run K6 Benchmark for Test 2 @ 500 vus
+        uses: addnab/docker-run-action@v3
+        with:
+          image: grafana/k6
+          options: --name k6 --rm -v $PWD/test/script.js:/script.js
+          run: run --vus 500 --duration 1m /script.js
+
+      - name: Print Telegraf metrics for Test 2
+        run: |
+          ls $PWD/output/*
+          cat $PWD/output/metrics.out
+
+
+      
+

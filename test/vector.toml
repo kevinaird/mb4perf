@@ -1,0 +1,27 @@
+[sources.docker_logs]
+type = "docker_logs"
+
+[transforms.my_transform_id]
+type = "remap"
+inputs = [ "docker_logs" ]
+source = '''
+    .timestamp = now()
+    .message, err = to_string(.timestamp) + " [" +.container_name + "] " + .message
+'''
+timezone = "local"
+
+[sinks.container_file_sink]
+type = "file"
+inputs = [ "my_transform_id" ]
+path = "/output/{{ container_name }}-%Y-%m-%d.log"
+
+[sinks.container_file_sink.encoding]
+codec = "text"
+
+[sinks.file_sink]
+type = "file"
+inputs = [ "my_transform_id" ]
+path = "/output/output-%Y-%m-%d.log"
+
+[sinks.file_sink.encoding]
+codec = "text"
